@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+\import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Your exact Firebase details verified from your live dashboard
@@ -26,37 +26,46 @@ window.handleWaitlistSubmit = async function(e) {
     submitButton.disabled = true;
     submitButton.textContent = 'TRANSMITTING...';
 
+    let firestoreSuccess = false;
+
+    // Step A: Log the user securely inside your Firestore Database
     try {
-        // Step A: Log the user securely inside your Firestore Database collection
         await addDoc(collection(db, "waitlist"), {
             email: targetEmail,
             timestamp: serverTimestamp()
         });
+        firestoreSuccess = true;
+    } catch (dbError) {
+        console.error("Firestore logging failed:", dbError);
+    }
 
-        // Step B: Transmit the automated thank you email via EmailJS browser pipeline
+    // Step B: Transmit automated thank you email via EmailJS browser SDK
+    try {
         const serviceID = 'service_u88c30o'; 
-        const templateID = 'template_a7ayx8p'; // MATCHES YOUR WELCOME TEMPLATE DASHBOARD EXACTLY
-        const publicKey = 'T03MF8IsTk9YmAjW';
+        const templateID = 'template_a7ayx8p'; 
 
-        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                service_id: serviceID,
-                template_id: templateID,
-                user_id: publicKey,
-                template_params: {
-                    'user_email': targetEmail
-                }
-            })
+        // Safe check to verify if the library is ready in window memory
+        const emailjsInstance = window.emailjs || ejs || telegram; 
+
+        await emailjsInstance.send(serviceID, templateID, {
+            'user_email': targetEmail,
+            'user_name': targetEmail.split('@')[0]
         });
 
         submitButton.textContent = 'ENTRY SECURED';
         submitButton.style.backgroundColor = '#b80f0a';
         form.reset();
-    } catch (error) {
-        console.error("Pipeline failure:", error);
-        submitButton.textContent = 'RETRY ERROR';
+    } catch (emailError) {
+        console.error("Email delivery pipeline failure:", emailError);
+        
+        // If it saved to database but email failed, we still want to show success to the user
+        if (firestoreSuccess) {
+            submitButton.textContent = 'ENTRY SECURED';
+            submitButton.style.backgroundColor = '#b80f0a';
+            form.reset();
+        } else {
+            submitButton.textContent = 'RETRY ERROR';
+        }
     }
 
     setTimeout(() => {
