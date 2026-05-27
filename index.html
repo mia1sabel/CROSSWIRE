@@ -94,14 +94,16 @@
                         Our 2026 artist roster is highly guarded. Join the inner circle to find out when the first wave drops.
                     </p>
                     
-                    <form id="waitlistForm" onsubmit="window.handleWaitlistSubmit(event)" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
-                        <input type="email" name="email" placeholder="ENTER YOUR EMAIL" required 
+                    <form id="waitlistForm" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
+                        <input type="email" id="emailInput" name="email" placeholder="ENTER YOUR EMAIL" required 
                             class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-sm focus:outline-none focus:border-[#b80f0a] flex-grow uppercase tracking-wider font-mono">
-                        <button type="submit" 
+                        <button type="submit" id="submitBtn"
                             class="bg-[#b80f0a] text-white text-xs font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition duration-300 whitespace-nowrap">
                             Join Inner Circle
                         </button>
                     </form>
+                    
+                    <p id="statusMessage" class="text-[11px] font-mono uppercase tracking-widest mt-4 hidden"></p>
                 </div>
             </div>
         </div>

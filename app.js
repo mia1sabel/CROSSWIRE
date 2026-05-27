@@ -1,7 +1,7 @@
-\import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
-// Your exact Firebase details verified from your live dashboard
 const firebaseConfig = {
   apiKey: "AIzaSyDnS4cZyU2tmn7gcgI3GzJXLqCOOf69Ks8",
   authDomain: "crosswire-site.firebaseapp.com",
@@ -12,102 +12,55 @@ const firebaseConfig = {
   measurementId: "G-VEHKJ4VZKS"
 };
 
+const EMAILJS_PUBLIC_KEY = "T03MF8lsTk9YmAljW";
+const EMAILJS_SERVICE_ID = "service_u88c30o";
+const EMAILJS_TEMPLATE_ID = "template_a7ayx8p";
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
-// Global wrapper to guarantee HTML forms can trigger the code directly
-window.handleWaitlistSubmit = async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const submitButton = form.querySelector('button[type="submit"]');
-    const emailInput = form.querySelector('input[type="email"]');
-    const targetEmail = emailInput.value.toLowerCase().trim();
-    
-    submitButton.disabled = true;
-    submitButton.textContent = 'TRANSMITTING...';
+const form = document.getElementById("waitlistForm");
+const emailInput = document.getElementById("emailInput");
+const submitBtn = document.getElementById("submitBtn");
+const statusMessage = document.getElementById("statusMessage");
 
-    let firestoreSuccess = false;
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-    // Step A: Log the user securely inside your Firestore Database
-    try {
-        await addDoc(collection(db, "waitlist"), {
-            email: targetEmail,
-            timestamp: serverTimestamp()
-        });
-        firestoreSuccess = true;
-    } catch (dbError) {
-        console.error("Firestore logging failed:", dbError);
-    }
+  const emailValue = emailInput.value.trim();
+  if (!emailValue) return;
 
-    // Step B: Transmit automated thank you email via EmailJS browser SDK
-    try {
-        const serviceID = 'service_u88c30o'; 
-        const templateID = 'template_a7ayx8p'; 
+  submitBtn.disabled = true;
+  submitBtn.textContent = "TRANSMITTING...";
+  showStatus("Securing connection...", "text-gray-400");
 
-        // Safe check to verify if the library is ready in window memory
-        const emailjsInstance = window.emailjs || ejs || telegram; 
+  try {
+    await addDoc(collection(db, "waitlist"), {
+      email: emailValue,
+      timestamp: serverTimestamp()
+    });
 
-        await emailjsInstance.send(serviceID, templateID, {
-            'user_email': targetEmail,
-            'user_name': targetEmail.split('@')[0]
-        });
+    const templateParams = {
+      user_email: emailValue, 
+      reply_to: emailValue
+    };
 
-        submitButton.textContent = 'ENTRY SECURED';
-        submitButton.style.backgroundColor = '#b80f0a';
-        form.reset();
-    } catch (emailError) {
-        console.error("Email delivery pipeline failure:", emailError);
-        
-        // If it saved to database but email failed, we still want to show success to the user
-        if (firestoreSuccess) {
-            submitButton.textContent = 'ENTRY SECURED';
-            submitButton.style.backgroundColor = '#b80f0a';
-            form.reset();
-        } else {
-            submitButton.textContent = 'RETRY ERROR';
-        }
-    }
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
 
-    setTimeout(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Join Inner Circle';
-        submitButton.style.backgroundColor = '';
-    }, 3500);
-};
+    showStatus("SUCCESS. ACCESS GRANTED. CHECK INBOX.", "text-green-500");
+    form.reset();
 
-window.handlePortalSubmit = async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const submitButton = form.querySelector('button[type="submit"]');
-    
-    submitButton.disabled = true;
-    submitButton.textContent = 'TRANSMITTING...';
+  } catch (error) {
+    console.error("Transmission Error:", error);
+    showStatus("CONNECTION ERROR. TRY AGAIN.", "text-[#b80f0a]");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Join Inner Circle";
+  }
+});
 
-    const type = form.querySelector('select[name="portal_type"]').value;
-    const name = form.querySelector('input[name="name"]').value;
-    const email = form.querySelector('input[name="email"]').value;
-    const message = form.querySelector('textarea[name="message"]').value;
-
-    try {
-        await addDoc(collection(db, "applications"), {
-            applicationType: type,
-            applicantName: name,
-            email: email.toLowerCase().trim(),
-            conceptDetails: message,
-            timestamp: serverTimestamp()
-        });
-
-        submitButton.textContent = 'APPLICATION FILED';
-        submitButton.style.backgroundColor = '#b80f0a';
-        form.reset();
-    } catch (error) {
-        console.error("Firestore Error:", error);
-        submitButton.textContent = 'RETRY ERROR';
-    }
-
-    setTimeout(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit Application';
-        submitButton.style.backgroundColor = '';
-    }, 3500);
-};
+function showStatus(text, textColorClass) {
+  statusMessage.textContent = text;
+  statusMessage.className = `text-[11px] font-mono uppercase tracking-widest mt-4 block ${textColorClass}`;
+}
