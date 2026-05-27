@@ -95,14 +95,13 @@
                     </p>
                     
                     <form id="waitlistForm" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
-                        <input type="email" placeholder="ENTER YOUR EMAIL" required 
+                        <input type="email" name="email" placeholder="ENTER YOUR EMAIL" required 
                             class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-sm focus:outline-none focus:border-[#b80f0a] flex-grow uppercase tracking-wider font-mono">
                         <button type="submit" 
                             class="bg-[#b80f0a] text-white text-xs font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition duration-300 whitespace-nowrap">
                             Join Inner Circle
                         </button>
                     </form>
-                    <p id="formFeedback" class="text-xs text-[#b80f0a] hidden mt-2 font-mono tracking-widest uppercase">Welcome to the Inner Circle.</p>
                 </div>
             </div>
         </div>
@@ -181,14 +180,25 @@
             <div class="space-y-6 bg-black p-8 border border-white/5">
                 <h3 class="text-xl font-bold uppercase tracking-wide">Involvement Portals</h3>
                 <div class="space-y-4 pt-2">
-                    <div class="block border border-white/10 p-4 hover:border-[#b80f0a]/50 transition duration-300">
-                        <p class="text-sm font-bold uppercase tracking-wider text-white">Streetwear Vendor Submissions</p>
-                        <p class="text-xs text-gray-500 mt-1">Are you a local streetwear designer, independent brand, or food vendor looking to secure a footprint?</p>
-                    </div>
-                    <div class="block border border-white/10 p-4 hover:border-[#b80f0a]/50 transition duration-300">
-                        <p class="text-sm font-bold uppercase tracking-wider text-white">Press & Creator Media Passes</p>
-                        <p class="text-xs text-gray-500 mt-1">Content creators, photographers, and journalists looking to capture the raw energy of ATL's new wave?</p>
-                    </div>
+                    <form id="portalForm" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1">Application Type</label>
+                            <select name="portal_type" required class="w-full bg-[#111111] border border-white/10 text-white p-3 text-xs focus:outline-none focus:border-[#b80f0a] font-mono tracking-wider">
+                                <option value="Streetwear Vendor">Streetwear Vendor Submission</option>
+                                <option value="Press / Media Pass">Press & Creator Media Pass</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" name="name" placeholder="YOUR NAME / BRAND" required class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono">
+                            <input type="email" name="email" placeholder="EMAIL ADDRESS" required class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono">
+                        </div>
+                        <div>
+                            <textarea name="message" rows="3" placeholder="TELL US ABOUT YOUR TARGET CONCEPT / LINKS TO WORK" required class="w-full bg-[#111111] border border-white/10 text-white placeholder-gray-600 p-4 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-white text-black text-xs font-bold uppercase tracking-widest py-3 hover:bg-[#b80f0a] hover:text-white transition duration-300">
+                            Submit Application
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -197,13 +207,13 @@
     <footer class="bg-black py-12 px-6 md:px-12 text-center border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>© 2026 Crosswire Festival. All Rights Reserved.</p>
-            <div class="flex space-x-6 text-gray-400">
-                <a href="#" class="hover:text-[#b80f0a] transition">Instagram</a>
-                <a href="#" class="hover:text-[#b80f0a] transition">TikTok</a>
+            <div class="flex space-x-6 text-gray-400 font-semibold tracking-widest text-[11px]">
+                <a href="https://www.instagram.com/crosswireatl/" target="_blank" rel="noopener noreferrer" class="hover:text-[#b80f0a] transition duration-300">Instagram</a>
+                <a href="https://www.tiktok.com/@crosswireatl" target="_blank" rel="noopener noreferrer" class="hover:text-[#b80f0a] transition duration-300">TikTok</a>
             </div>
         </div>
     </footer>
 
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
