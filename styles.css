@@ -1,4 +1,8 @@
-/* Custom CSS adjustments to augment Tailwind */
+@theme {
+  --font-display: 'Syncopate', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -8,7 +12,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Custom layout styling inspired by coreent.net minimalist frames */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -17,12 +20,4 @@ body {
 }
 ::-webkit-scrollbar-thumb {
     background: #222222;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #444444;
-}
-
-/* Force brutalist Syncopate titles to pack together closely */
-font-['Syncopate'] {
-    letter-spacing: -0.05em;
 }
