@@ -1,5 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// Natively import EmailJS direct from CDN to kill network script race conditions
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.js";
 
 // Your exact Firebase details verified from your live dashboard
 const firebaseConfig = {
@@ -15,8 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Helper function to pause execution if scripts are still initializing
-const delay = ms => new Promise(res => setTimeout(res, ms));
+// Initialize modular emailjs key immediately inside the script bundle
+emailjs.init("T03MF8lsTk9YmAljW");
 
 // Global wrapper to guarantee HTML forms can trigger the code directly
 window.handleWaitlistSubmit = async function(e) {
@@ -42,31 +44,17 @@ window.handleWaitlistSubmit = async function(e) {
         console.error("Firestore logging failed:", dbError);
     }
 
-    // Step B: Transmit automated thank you email via EmailJS browser SDK
+    // Step B: Transmit automated thank you email via modular EmailJS SDK
     try {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
 
-        // Dynamic check loop: Wait up to 3 seconds for the global script to sync
-        let retries = 6;
-        while (!window.emailjs && retries > 0) {
-            console.log("Waiting for EmailJS SDK initialization...");
-            await delay(500);
-            retries--;
-        }
-
-        const ejs = window.emailjs;
-
-        if (ejs && typeof ejs.send === 'function') {
-            await ejs.send(serviceID, templateID, {
-                'user_email': targetEmail,
-                'user_name': targetEmail.split('@')[0]
-            });
-            console.log("Email tracking successfully pushed to EmailJS API.");
-        } else {
-            throw new Error("EmailJS SDK failed to load within window context.");
-        }
-
+        await emailjs.send(serviceID, templateID, {
+            'user_email': targetEmail,
+            'user_name': targetEmail.split('@')[0]
+        });
+        
+        console.log("Email tracking successfully pushed to EmailJS API.");
         submitButton.textContent = 'ENTRY SECURED';
         submitButton.style.backgroundColor = '#b80f0a';
         form.reset();
