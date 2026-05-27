@@ -1,7 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-// Natively import EmailJS direct from CDN to kill network script race conditions
-import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.js";
 
 // Your exact Firebase details verified from your live dashboard
 const firebaseConfig = {
@@ -16,9 +14,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// Initialize modular emailjs key immediately inside the script bundle
-emailjs.init("T03MF8lsTk9YmAljW");
 
 // Global wrapper to guarantee HTML forms can trigger the code directly
 window.handleWaitlistSubmit = async function(e) {
@@ -40,21 +35,27 @@ window.handleWaitlistSubmit = async function(e) {
             timestamp: serverTimestamp()
         });
         firestoreSuccess = true;
+        console.log("Logged securely inside Firebase Database");
     } catch (dbError) {
         console.error("Firestore logging failed:", dbError);
     }
 
-    // Step B: Transmit automated thank you email via modular EmailJS SDK
+    // Step B: Transmit automated thank you email via EmailJS browser SDK
     try {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
 
-        await emailjs.send(serviceID, templateID, {
-            'user_email': targetEmail,
-            'user_name': targetEmail.split('@')[0]
-        });
-        
-        console.log("Email tracking successfully pushed to EmailJS API.");
+        // Safely check if emailjs script exists on the page
+        if (window.emailjs) {
+            await window.emailjs.send(serviceID, templateID, {
+                'user_email': targetEmail,
+                'user_name': targetEmail.split('@')[0]
+            });
+            console.log("Email tracking successfully pushed to EmailJS API.");
+        } else {
+            console.warn("EmailJS script was not detected in the HTML window workspace.");
+        }
+
         submitButton.textContent = 'ENTRY SECURED';
         submitButton.style.backgroundColor = '#b80f0a';
         form.reset();
