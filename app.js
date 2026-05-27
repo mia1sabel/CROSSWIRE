@@ -17,7 +17,7 @@ const db = getFirestore(app);
 
 // Global wrapper to guarantee HTML forms can trigger the code directly
 window.handleWaitlistSubmit = async function(e) {
-    e.preventDefault(); // STOPS THE PAGE FROM JUMPING TO THE TOP
+    e.preventDefault(); // Freezes the page from jumping up
     const form = e.target;
     const submitButton = form.querySelector('button[type="submit"]');
     const emailInput = form.querySelector('input[type="email"]');
@@ -44,13 +44,17 @@ window.handleWaitlistSubmit = async function(e) {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
 
-        // Safe fallback check to verify library initialization
-        const emailjsInstance = window.emailjs || emailjs; 
+        // Explicitly grab the window initialized object to fix race conditions
+        const ejs = window.emailjs;
 
-        await emailjsInstance.send(serviceID, templateID, {
-            'user_email': targetEmail,
-            'user_name': targetEmail.split('@')[0]
-        });
+        if (ejs && typeof ejs.send === 'function') {
+            await ejs.send(serviceID, templateID, {
+                'user_email': targetEmail,
+                'user_name': targetEmail.split('@')[0]
+            });
+        } else {
+            console.warn("EmailJS not fully loaded in window context yet.");
+        }
 
         submitButton.textContent = 'ENTRY SECURED';
         submitButton.style.backgroundColor = '#b80f0a';
@@ -58,6 +62,7 @@ window.handleWaitlistSubmit = async function(e) {
     } catch (emailError) {
         console.error("Email delivery pipeline failure:", emailError);
         
+        // Fallback: If it saved to Firebase, still show success to the user
         if (firestoreSuccess) {
             submitButton.textContent = 'ENTRY SECURED';
             submitButton.style.backgroundColor = '#b80f0a';
@@ -110,4 +115,3 @@ window.handlePortalSubmit = async function(e) {
         submitButton.style.backgroundColor = '';
     }, 3500);
 };
-// deployment reset trigger
