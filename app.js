@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// Your exact Firebase details verified from your live dashboard
 const firebaseConfig = {
   apiKey: "AIzaSyDnS4cZyU2tmn7gcgI3GzJXLqCOOf69Ks8",
   authDomain: "crosswire-site.firebaseapp.com",
@@ -26,18 +27,24 @@ window.handleWaitlistSubmit = async function(e) {
     submitButton.textContent = 'TRANSMITTING...';
 
     try {
+        // Step A: Log the user securely inside your Firestore Database collection
         await addDoc(collection(db, "waitlist"), {
             email: targetEmail,
             timestamp: serverTimestamp()
         });
 
+        // Step B: Transmit the automated thank you email via EmailJS browser pipeline
+        const serviceID = 'service_u88c30o'; 
+        const templateID = 'template_a7ayx8p'; // MATCHES YOUR WELCOME TEMPLATE DASHBOARD EXACTLY
+        const publicKey = 'T03MF8IsTk9YmAjW';
+
         await fetch('https://api.emailjs.com/api/v1.0/email/send', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                service_id: 'service_u88c30o',
-                template_id: 'template_m7s3b72',
-                user_id: 'T03MF8IsTk9YmAjW',
+                service_id: serviceID,
+                template_id: templateID,
+                user_id: publicKey,
                 template_params: {
                     'user_email': targetEmail
                 }
