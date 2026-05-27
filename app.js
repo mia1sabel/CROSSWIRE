@@ -40,22 +40,22 @@ window.handleWaitlistSubmit = async function(e) {
         console.error("Firestore logging failed:", dbError);
     }
 
-    // Step B: Transmit automated thank you email via EmailJS browser SDK
+    // Step B: Dynamically fetch and trigger EmailJS to prevent "Not Defined" errors
     try {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
+        const publicKey = 'T03MF8lsTk9YmAljW';
 
-        // Safely check if emailjs script exists on the page
-        if (window.emailjs) {
-            await window.emailjs.send(serviceID, templateID, {
-                'user_email': targetEmail,
-                'user_name': targetEmail.split('@')[0]
-            });
-            console.log("Email tracking successfully pushed to EmailJS API.");
-        } else {
-            console.warn("EmailJS script was not detected in the HTML window workspace.");
-        }
+        // Forces the browser to load EmailJS instantly in sync with our click event
+        const emailModule = await import("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm");
+        const ejs = emailModule.default || emailModule;
 
+        await ejs.send(serviceID, templateID, {
+            'user_email': targetEmail,
+            'user_name': targetEmail.split('@')[0]
+        }, publicKey);
+
+        console.log("Email tracking successfully pushed to EmailJS API.");
         submitButton.textContent = 'ENTRY SECURED';
         submitButton.style.backgroundColor = '#b80f0a';
         form.reset();
