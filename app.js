@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Your exact Firebase details
 const firebaseConfig = {
   apiKey: "AIzaSyDnS4cZyU2tmn7gcgI3GzJXLqCOOf69Ks8",
   authDomain: "crosswire-site.firebaseapp.com",
@@ -15,107 +14,84 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.addEventListener('DOMContentLoaded', () => {
+// Global wrapper to guarantee HTML forms can trigger the code directly
+window.handleWaitlistSubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const emailInput = form.querySelector('input[type="email"]');
+    const targetEmail = emailInput.value.toLowerCase().trim();
     
-    // 1. HANDLE INNER CIRCLE WAITLIST FORM SUBMISSIONS
-    const waitlistForm = document.getElementById('waitlistForm');
-    if (waitlistForm) {
-        waitlistForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const submitButton = waitlistForm.querySelector('button[type="submit"]');
-            const emailInput = waitlistForm.querySelector('input[type="email"]');
-            
-            if (!submitButton || !emailInput) {
-                console.error("Form elements missing inside waitlistForm");
-                return;
-            }
+    submitButton.disabled = true;
+    submitButton.textContent = 'TRANSMITTING...';
 
-            const targetEmail = emailInput.value.toLowerCase().trim();
-            
-            submitButton.disabled = true;
-            submitButton.textContent = 'TRANSMITTING...';
-
-            try {
-                // Step A: Log the user securely inside your Firestore Database collection
-                await addDoc(collection(db, "waitlist"), {
-                    email: targetEmail,
-                    timestamp: serverTimestamp()
-                });
-
-                // Step B: Transmit the automated thank you email via EmailJS browser pipeline
-                const serviceID = 'service_u88c30o'; 
-                const templateID = 'template_m7s3b72';
-                const publicKey = 'T03MF8IsTk9YmAjW';
-
-                await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        service_id: serviceID,
-                        template_id: templateID,
-                        user_id: publicKey,
-                        template_params: {
-                            'user_email': targetEmail
-                        }
-                    })
-                });
-
-                submitButton.textContent = 'ENTRY SECURED';
-                submitButton.style.backgroundColor = '#b80f0a';
-                waitlistForm.reset();
-            } catch (error) {
-                console.error("Pipeline failure:", error);
-                submitButton.textContent = 'RETRY ERROR';
-            }
-
-            setTimeout(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Join Inner Circle';
-                submitButton.style.backgroundColor = '';
-            }, 3500);
+    try {
+        await addDoc(collection(db, "waitlist"), {
+            email: targetEmail,
+            timestamp: serverTimestamp()
         });
+
+        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                service_id: 'service_u88c30o',
+                template_id: 'template_m7s3b72',
+                user_id: 'T03MF8IsTk9YmAjW',
+                template_params: {
+                    'user_email': targetEmail
+                }
+            })
+        });
+
+        submitButton.textContent = 'ENTRY SECURED';
+        submitButton.style.backgroundColor = '#b80f0a';
+        form.reset();
+    } catch (error) {
+        console.error("Pipeline failure:", error);
+        submitButton.textContent = 'RETRY ERROR';
     }
 
-    // 2. STREETWEAR VENDOR & PRESS PORTAL SUBMISSIONS
-    const portalForm = document.getElementById('portalForm');
-    if (portalForm) {
-        portalForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitButton = portalForm.querySelector('button[type="submit"]');
-            
-            if (!submitButton) return;
-            
-            submitButton.disabled = true;
-            submitButton.textContent = 'TRANSMITTING...';
+    setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Join Inner Circle';
+        submitButton.style.backgroundColor = '';
+    }, 3500);
+};
 
-            const type = portalForm.querySelector('select[name="portal_type"]').value;
-            const name = portalForm.querySelector('input[name="name"]').value;
-            const email = portalForm.querySelector('input[name="email"]').value;
-            const message = portalForm.querySelector('textarea[name="message"]').value;
+window.handlePortalSubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    submitButton.disabled = true;
+    submitButton.textContent = 'TRANSMITTING...';
 
-            try {
-                await addDoc(collection(db, "applications"), {
-                    applicationType: type,
-                    applicantName: name,
-                    email: email.toLowerCase().trim(),
-                    conceptDetails: message,
-                    timestamp: serverTimestamp()
-                });
+    const type = form.querySelector('select[name="portal_type"]').value;
+    const name = form.querySelector('input[name="name"]').value;
+    const email = form.querySelector('input[name="email"]').value;
+    const message = form.querySelector('textarea[name="message"]').value;
 
-                submitButton.textContent = 'APPLICATION FILED';
-                submitButton.style.backgroundColor = '#b80f0a';
-                portalForm.reset();
-            } catch (error) {
-                console.error("Firestore Error:", error);
-                submitButton.textContent = 'RETRY ERROR';
-            }
-
-            setTimeout(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit Application';
-                submitButton.style.backgroundColor = '';
-            }, 3500);
+    try {
+        await addDoc(collection(db, "applications"), {
+            applicationType: type,
+            applicantName: name,
+            email: email.toLowerCase().trim(),
+            conceptDetails: message,
+            timestamp: serverTimestamp()
         });
+
+        submitButton.textContent = 'APPLICATION FILED';
+        submitButton.style.backgroundColor = '#b80f0a';
+        form.reset();
+    } catch (error) {
+        console.error("Firestore Error:", error);
+        submitButton.textContent = 'RETRY ERROR';
     }
-});
+
+    setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+        submitButton.style.backgroundColor = '';
+    }, 3500);
+};

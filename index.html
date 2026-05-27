@@ -94,7 +94,7 @@
                         Our 2026 artist roster is highly guarded. Join the inner circle to find out when the first wave drops.
                     </p>
                     
-                    <form id="waitlistForm" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
+                    <form id="waitlistForm" onsubmit="window.handleWaitlistSubmit(event)" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
                         <input type="email" name="email" placeholder="ENTER YOUR EMAIL" required 
                             class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-sm focus:outline-none focus:border-[#b80f0a] flex-grow uppercase tracking-wider font-mono">
                         <button type="submit" 
@@ -180,7 +180,7 @@
             <div class="space-y-6 bg-black p-8 border border-white/5">
                 <h3 class="text-xl font-bold uppercase tracking-wide">Involvement Portals</h3>
                 <div class="space-y-4 pt-2">
-                    <form id="portalForm" class="space-y-4">
+                    <form id="portalForm" onsubmit="window.handlePortalSubmit(event)" class="space-y-4">
                         <div>
                             <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1">Application Type</label>
                             <select name="portal_type" required class="w-full bg-[#111111] border border-white/10 text-white p-3 text-xs focus:outline-none focus:border-[#b80f0a] font-mono tracking-wider">
