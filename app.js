@@ -15,6 +15,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Helper function to sleep/pause execution if scripts are still loading
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 // Global wrapper to guarantee HTML forms can trigger the code directly
 window.handleWaitlistSubmit = async function(e) {
     e.preventDefault(); // Freezes the page from jumping up
@@ -44,7 +47,14 @@ window.handleWaitlistSubmit = async function(e) {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
 
-        // Explicitly grab the window initialized object to fix race conditions
+        // Dynamic check loop: Wait up to 3 seconds for the global network script if needed
+        let retries = 6;
+        while (!window.emailjs && retries > 0) {
+            console.log("Waiting for EmailJS SDK initialization...");
+            await delay(500);
+            retries--;
+        }
+
         const ejs = window.emailjs;
 
         if (ejs && typeof ejs.send === 'function') {
@@ -52,8 +62,9 @@ window.handleWaitlistSubmit = async function(e) {
                 'user_email': targetEmail,
                 'user_name': targetEmail.split('@')[0]
             });
+            console.log("Email tracking successfully pushed to EmailJS api.");
         } else {
-            console.warn("EmailJS not fully loaded in window context yet.");
+            throw new Error("EmailJS SDK failed to load within window context.");
         }
 
         submitButton.textContent = 'ENTRY SECURED';
@@ -62,7 +73,7 @@ window.handleWaitlistSubmit = async function(e) {
     } catch (emailError) {
         console.error("Email delivery pipeline failure:", emailError);
         
-        // Fallback: If it saved to Firebase, still show success to the user
+        // Fallback safety catch
         if (firestoreSuccess) {
             submitButton.textContent = 'ENTRY SECURED';
             submitButton.style.backgroundColor = '#b80f0a';
