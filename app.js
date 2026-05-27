@@ -1,4 +1,4 @@
-\import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Your exact Firebase details verified from your live dashboard
@@ -17,7 +17,7 @@ const db = getFirestore(app);
 
 // Global wrapper to guarantee HTML forms can trigger the code directly
 window.handleWaitlistSubmit = async function(e) {
-    e.preventDefault();
+    e.preventDefault(); // STOPS THE PAGE FROM JUMPING TO THE TOP
     const form = e.target;
     const submitButton = form.querySelector('button[type="submit"]');
     const emailInput = form.querySelector('input[type="email"]');
@@ -28,7 +28,7 @@ window.handleWaitlistSubmit = async function(e) {
 
     let firestoreSuccess = false;
 
-    // Step A: Log the user securely inside your Firestore Database
+    // Step A: Log the user securely inside your Firebase Database
     try {
         await addDoc(collection(db, "waitlist"), {
             email: targetEmail,
@@ -44,8 +44,8 @@ window.handleWaitlistSubmit = async function(e) {
         const serviceID = 'service_u88c30o'; 
         const templateID = 'template_a7ayx8p'; 
 
-        // Safe check to verify if the library is ready in window memory
-        const emailjsInstance = window.emailjs || ejs || telegram; 
+        // Safe fallback check to verify library initialization
+        const emailjsInstance = window.emailjs || emailjs; 
 
         await emailjsInstance.send(serviceID, templateID, {
             'user_email': targetEmail,
@@ -58,7 +58,6 @@ window.handleWaitlistSubmit = async function(e) {
     } catch (emailError) {
         console.error("Email delivery pipeline failure:", emailError);
         
-        // If it saved to database but email failed, we still want to show success to the user
         if (firestoreSuccess) {
             submitButton.textContent = 'ENTRY SECURED';
             submitButton.style.backgroundColor = '#b80f0a';
