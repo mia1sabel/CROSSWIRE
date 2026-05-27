@@ -110,3 +110,4 @@ window.handlePortalSubmit = async function(e) {
         submitButton.style.backgroundColor = '';
     }, 3500);
 };
+// deployment reset trigger
