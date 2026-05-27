@@ -1,231 +1,79 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CROSSWIRE | Lines Blurred. Limits Broken.</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    
+    <title>CROSSWIRE | Lines Blurred</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100..700&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function() {
-            emailjs.init({
-                publicKey: "T03MF8IsTk9YmAjW",
-            });
-        })();
+       (function(){
+          emailjs.init({
+            publicKey: "T03MF8lsTk9YmAljW",
+          });
+       })();
     </script>
-
-    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-[#0a0a0a] text-white font-sans antialiased tracking-tight overflow-x-hidden">
-
-    <div class="fixed inset-0 border-[12px] border-[#0d0d0d] pointer-events-none z-50 hidden md:block">
-        <div class="w-full h-full border border-[#b80f0a]/10"></div>
-    </div>
-
-    <nav class="fixed top-0 left-0 w-full z-40 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#b80f0a]/20 px-6 py-4 md:px-12 flex justify-between items-center">
-        <a href="#" class="font-display text-xl md:text-2xl font-bold tracking-widest text-white hover:text-[#b80f0a] transition duration-300">CROSSWIRE</a>
-        <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-semibold text-gray-400">
-            <a href="#about" class="hover:text-white transition">About</a>
-            <a href="#lineup" class="hover:text-[#b80f0a] transition">Lineup</a>
-            <a href="#tickets" class="hover:text-white transition">Tickets</a>
-            <a href="#connect" class="hover:text-white transition">Partners</a>
-        </div>
-        <a href="#tickets" class="bg-[#b80f0a] text-white px-5 py-2 text-xs uppercase tracking-widest font-bold hover:bg-transparent hover:text-white border border-[#b80f0a] transition duration-300">
-            Get Tickets
-        </a>
-    </nav>
-
-    <header class="relative h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
-        <div class="absolute inset-0 z-0 bg-radial from-transparent to-[#0a0a0a]">
-            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-15 filter grayscale contrast-125 mix-blend-lighten">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-concert-stage-with-flashing-lights-and-smoke-43460-large.mp4" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 bg-[#b80f0a]/5 mix-blend-color"></div>
-        </div>
-
-        <div class="relative z-10 max-w-4xl mx-auto space-y-6 px-4">
-            <p class="text-xs uppercase tracking-[0.4em] text-[#b80f0a] font-bold">September 26, 2026 // Atlanta, GA</p>
-            <h1 class="font-display text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none uppercase text-white">
-                CROSS<span class="text-[#b80f0a]">WIRE</span>
-            </h1>
-            <p class="text-md sm:text-xl md:text-2xl font-light text-gray-300 tracking-wide max-w-2xl mx-auto italic">
-                "Lines Blurred. Limits Broken."
-            </p>
-            <div class="pt-6">
-                <p class="text-sm text-gray-400 mb-2 uppercase tracking-widest">Atlanta Utility Works</p>
-                <a href="#tickets" class="inline-block bg-transparent text-white border-2 border-[#b80f0a] font-bold uppercase tracking-widest text-xs px-8 py-4 hover:bg-[#b80f0a] transition duration-300">
-                    Explore Tiers
-                </a>
-            </div>
-        </div>
-
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-            <span class="text-[10px] uppercase tracking-[0.3em] text-[#b80f0a]/70 font-semibold">Scroll Down</span>
-        </div>
+<body>
+    <header>
+        <div class="logo">CROSSWIRE</div>
+        <nav>
+            <a href="#about">ABOUT</a>
+            <a href="#lineup">LINEUP</a>
+            <a href="#tickets">TICKETS</a>
+            <a href="#partners">PARTNERS</a>
+        </nav>
+        <button class="ticket-btn" onclick="document.getElementById('portal').scrollIntoView({behavior: 'smooth'})">GET TICKETS</button>
     </header>
 
-    <section id="about" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-[#b80f0a]">Highlights from last year</span>
-                <h2 class="text-3xl md:text-5xl font-bold tracking-tight mt-2 mb-6 uppercase">The Intersection of Underground Sound & Streetwear Culture</h2>
-                <p class="text-gray-400 leading-relaxed mb-4">
-                    Corporate festivals have become overpriced, sterile, and safe. They've lost the raw energy of underground hip-hop and moshpit culture. Crosswire is the antidote. We bridge the gap between high-energy physical performances and local independent streetwear commerce.
-                </p>
+    <main>
+        <section id="roster" class="roster-section">
+            <h2>2026 ROSTER</h2>
+            <div class="roster-box">
+                <h3>CURRENTLY UNDER WRAPS</h3>
+                <p>Our 2026 artist roster is highly guarded. Join the inner circle to find out when the first wave drops.</p>
+                <form class="waitlist-form" onsubmit="window.handleWaitlistSubmit(event)">
+                    <input type="email" placeholder="ENTER YOUR EMAIL" required>
+                    <button type="submit">Join Inner Circle</button>
+                </form>
             </div>
-            <div class="bg-[#111111] p-8 border-l-4 border-[#b80f0a] space-y-4">
-                <h3 class="font-display text-lg font-bold tracking-wider text-white">YEAR ONE IMPACT</h3>
-                <div class="grid grid-cols-2 gap-4 pt-2">
-                    <div>
-                        <p class="text-4xl font-black text-white">500+</p>
-                        <p class="text-xs uppercase text-gray-500 tracking-wider">Attendees Deep</p>
+        </section>
+
+        <section id="portal" class="portal-section">
+            <h2>APPLICATION PORTAL</h2>
+            <div class="portal-box">
+                <form class="application-form" onsubmit="window.handlePortalSubmit(event)">
+                    <div class="form-group">
+                        <label for="portal_type">SELECT PORTAL TYPE</label>
+                        <select name="portal_type" id="portal_type" required>
+                            <option value="artist">ARTIST/PERFORMER SUBMISSION</option>
+                            <option value="vendor">VENDOR APPLICATION</option>
+                            <option value="press">PRESS/MEDIA CREDENTIALS</option>
+                            <option value="sponsor">SPONSORSHIP INQUIRY</option>
+                        </select>
                     </div>
-                    <div>
-                        <p class="text-4xl font-black text-[#b80f0a]">PURE</p>
-                        <p class="text-xs uppercase text-gray-500 tracking-wider">Authentic Energy</p>
+                    <div class="form-group">
+                        <label for="name">FULL NAME / COMPANY</label>
+                        <input type="text" name="name" id="name" required>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="lineup" class="bg-[#0d0d0d] py-24 px-6 md:px-12 border-t border-white/5">
-        <div class="max-w-4xl mx-auto text-center space-y-8">
-            <h2 class="font-display text-3xl md:text-6xl font-black tracking-tight uppercase">2026 ROSTER</h2>
-            <div class="border border-[#b80f0a]/20 p-12 bg-black relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-b from-[#b80f0a]/5 to-transparent pointer-events-none"></div>
-                <div class="relative z-10 space-y-4">
-                    <p class="text-xl md:text-2xl font-semibold tracking-wide uppercase text-[#b80f0a]">Currently Under Wraps</p>
-                    <p class="text-sm text-gray-400 max-w-md mx-auto">
-                        Our 2026 artist roster is highly guarded. Join the inner circle to find out when the first wave drops.
-                    </p>
-                    
-                    <form id="waitlistForm" onsubmit="window.handleWaitlistSubmit(event)" class="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-2">
-                        <input type="email" name="email" placeholder="ENTER YOUR EMAIL" required 
-                            class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-sm focus:outline-none focus:border-[#b80f0a] flex-grow uppercase tracking-wider font-mono">
-                        <button type="submit" 
-                            class="bg-[#b80f0a] text-white text-xs font-bold uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition duration-300 whitespace-nowrap">
-                            Join Inner Circle
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tickets" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="font-display text-3xl md:text-5xl font-black uppercase">Secure Your Entry</h2>
-            <p class="text-gray-400 text-sm mt-2 uppercase tracking-widest">Sign up for the Waitlist</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="border border-white/5 bg-[#111111] p-8 flex flex-col justify-between transition-all hover:border-[#b80f0a]/30 duration-300">
-                <div>
-                    <div class="flex justify-between items-start">
-                        <h3 class="text-lg font-bold uppercase tracking-wider">Early Bird</h3>
-                        <span class="text-xs bg-[#b80f0a]/20 text-[#b80f0a] px-2 py-1 uppercase font-mono font-bold">Limited</span>
+                    <div class="form-group">
+                        <label for="email">EMAIL ADDRESS</label>
+                        <input type="email" name="email" id="email" required>
                     </div>
-                    <p class="text-3xl font-black mt-4 font-mono">$25.00</p>
-                    <p class="text-xs text-gray-400 mt-4 leading-relaxed">
-                        Snag your entry early at our lowest student-friendly rate. Limited quantities available for the core community who wants to be there first.
-                    </p>
-                </div>
-                <a href="#lineup" class="mt-8 block text-center w-full border border-white/20 text-white text-xs font-bold uppercase tracking-widest py-3 hover:bg-white hover:text-black hover:border-white transition duration-300">
-                    Join Waitlist
-                </a>
+                    <div class="form-group">
+                        <label for="message">CONCEPT DETAILS / LINKS</label>
+                        <textarea name="message" id="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit">Submit Application</button>
+                </form>
             </div>
+        </section>
+    </main>
 
-            <div class="border-2 border-[#b80f0a] bg-black p-8 flex flex-col justify-between relative shadow-[0_0_30px_rgba(184,15,10,0.15)]">
-                <div class="absolute -top-3 left-6 bg-[#b80f0a] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1">
-                    Most Popular
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold uppercase tracking-wider mt-2">General Admission</h3>
-                    <p class="text-3xl font-black mt-4 font-mono text-[#b80f0a]">$40.00</p>
-                    <p class="text-xs text-gray-300 mt-4 leading-relaxed">
-                        Full single-day access to high-energy live music performances, streetwear pop-ups, immersive activations, and local food & drink vendors.
-                    </p>
-                </div>
-                <a href="#lineup" class="mt-8 block text-center w-full bg-[#b80f0a] text-white text-xs font-bold uppercase tracking-widest py-3 hover:bg-transparent hover:text-white border border-[#b80f0a] transition duration-300">
-                    Join Waitlist
-                </a>
-            </div>
-
-            <div class="border border-white/5 bg-[#111111] p-8 flex flex-col justify-between transition-all hover:border-[#b80f0a]/30 duration-300">
-                <div>
-                    <h3 class="text-lg font-bold uppercase tracking-wider">VIP Pass</h3>
-                    <p class="text-3xl font-black mt-4 font-mono">$125.00</p>
-                    <p class="text-xs text-gray-400 mt-4 leading-relaxed">
-                        Elevate your festival experience. Includes fast-track entry, exclusive hospitality perks, and access to the dedicated premium VIP Lounge area.
-                    </p>
-                </div>
-                <a href="#lineup" class="mt-8 block text-center w-full border border-white/20 text-white text-xs font-bold uppercase tracking-widest py-3 hover:bg-white hover:text-black hover:border-white transition duration-300">
-                    Join Waitlist
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section id="connect" class="bg-[#0d0d0d] py-24 px-6 md:px-12 border-t border-white/5">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div class="space-y-6">
-                <span class="text-xs font-bold uppercase tracking-widest text-[#b80f0a]">Sponsors & Partners</span>
-                <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-tight">Our 2026 Partners</h2>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    We prioritize partnerships that enhance the attendee experience and feel authentic within Crosswire's creative community. From local startups to top-tier global brands, our collaborative models deliver directly to a hyper-engaged Gen-Z audience.
-                </p>
-                <div class="pt-4 border-t border-white/5 space-y-3">
-                    <p class="text-xs text-gray-400 uppercase tracking-widest">Brand / Custom Inquiries:</p>
-                    <a href="mailto:Crosswireatl@gmail.com" class="text-lg font-mono text-white underline hover:text-[#b80f0a] transition block">
-                        Crosswireatl@gmail.com
-                    </a>
-                </div>
-            </div>
-
-            <div class="space-y-6 bg-black p-8 border border-white/5">
-                <h3 class="text-xl font-bold uppercase tracking-wide">Involvement Portals</h3>
-                <div class="space-y-4 pt-2">
-                    <form id="portalForm" onsubmit="window.handlePortalSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1">Application Type</label>
-                            <select name="portal_type" required class="w-full bg-[#111111] border border-white/10 text-white p-3 text-xs focus:outline-none focus:border-[#b80f0a] font-mono tracking-wider">
-                                <option value="Streetwear Vendor">Streetwear Vendor Submission</option>
-                                <option value="Press / Media Pass">Press & Creator Media Pass</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <input type="text" name="name" placeholder="YOUR NAME / BRAND" required class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono">
-                            <input type="email" name="email" placeholder="EMAIL ADDRESS" required class="bg-[#111111] border border-white/10 text-white placeholder-gray-600 px-4 py-3 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono">
-                        </div>
-                        <div>
-                            <textarea name="message" rows="3" placeholder="TELL US ABOUT YOUR TARGET CONCEPT / LINKS TO WORK" required class="w-full bg-[#111111] border border-white/10 text-white placeholder-gray-600 p-4 text-xs focus:outline-none focus:border-[#b80f0a] uppercase tracking-wider font-mono"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-white text-black text-xs font-bold uppercase tracking-widest py-3 hover:bg-[#b80f0a] hover:text-white transition duration-300">
-                            Submit Application
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-black py-12 px-6 md:px-12 text-center border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>© 2026 Crosswire Festival. All Rights Reserved.</p>
-            <div class="flex space-x-6 text-gray-400 font-semibold tracking-widest text-[11px]">
-                <a href="https://www.instagram.com/crosswireatl/" target="_blank" rel="noopener noreferrer" class="hover:text-[#b80f0a] transition duration-300">Instagram</a>
-                <a href="https://www.tiktok.com/@crosswireatl" target="_blank" rel="noopener noreferrer" class="hover:text-[#b80f0a] transition duration-300">TikTok</a>
-            </div>
-        </div>
-    </footer>
-
-    <script type="module" src="./app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
