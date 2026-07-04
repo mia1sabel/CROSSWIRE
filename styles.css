@@ -1,6 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+/* Link your uploaded custom font file: Ynsect Moksha.ttf */
+@font-face {
+  font-family: 'Heroyn Cittabhumi';
+  src: url('Ynsect Moksha.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Explicit Utility Classes so fonts work reliably with Tailwind CDN v4 */
+.font-display {
+  font-family: 'Heroyn Cittabhumi', sans-serif !important;
+  letter-spacing: 0.1em !important;
+}
+
+.font-sans {
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* Tailwind Theme Configuration */
 @theme {
-  --font-display: 'Syncopate', sans-serif;
-  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Heroyn Cittabhumi', sans-serif;
+  --font-sans: 'DM Sans', sans-serif;
 }
 
 html {
@@ -8,6 +30,7 @@ html {
 }
 
 body {
+    font-family: 'DM Sans', sans-serif;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 }
